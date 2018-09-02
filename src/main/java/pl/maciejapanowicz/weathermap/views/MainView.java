@@ -10,4 +10,8 @@ public class MainView {
         System.out.println("type the city you want to check for a weather");
     }
 
+    public void printWeather (String weatherText){
+        System.out.println(weatherText);
+    }
+
 }
