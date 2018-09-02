@@ -19,7 +19,7 @@ public class MainController {
         createMainLoop();
     }
 
-    public void createMainLoop(){
+    private void createMainLoop(){
         String userAnswer;
         do {
             mainView.askForCityToCheckWeather();

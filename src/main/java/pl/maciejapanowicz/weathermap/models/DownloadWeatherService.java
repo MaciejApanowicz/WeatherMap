@@ -18,12 +18,11 @@ public class DownloadWeatherService {
     private String readWebsite (String url){
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            HttpURLConnection httpURLConnection =  (HttpURLConnection) new URL(url).openConnection();
+            HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
             InputStream inputStream = httpURLConnection.getInputStream();
 
-            int response = 0;
+            int response;
             while ((response = inputStream.read()) != -1){
-
                 stringBuilder.append((char) response);
             }
         }catch (IOException e) {
@@ -33,6 +32,7 @@ public class DownloadWeatherService {
     }
 
     public String getWeather(String cityName){
-        return null; // todo: use readWebsite method and read JSON to read current weather
+        String url = Config.URL_TO_APi + cityName + "&appid=" +Config.API_KEY;
+        return readWebsite(url);
     }
 }
