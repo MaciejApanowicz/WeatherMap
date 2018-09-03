@@ -1,5 +1,7 @@
 package pl.maciejapanowicz.weathermap.models;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -33,6 +35,19 @@ public class DownloadWeatherService {
 
     public String getWeather(String cityName){
         String url = Config.URL_TO_APi + cityName + "&appid=" +Config.API_KEY;
-        return readWebsite(url);
+        String json = readWebsite(url);
+
+        String result;
+        JSONObject jsonObject = new JSONObject(json);
+        JSONObject main = jsonObject.getJSONObject("main");
+
+        double temp = main.getDouble("temp");
+        int pressure = main.getInt("pressure");
+        int humidity = main.getInt("humidity");
+        double temp_min = main.getDouble("temp_min");
+        double temp_max = main.getDouble("temp_max");
+
+
+        return "Temp: " + (temp - 273) + " pressure: " + pressure + " humidity: " + humidity;
     }
 }
