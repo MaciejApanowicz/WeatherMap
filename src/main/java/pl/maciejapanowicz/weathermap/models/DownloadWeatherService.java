@@ -38,7 +38,6 @@ public class DownloadWeatherService {
         JSONObject main = jsonObject.getJSONObject("main");
         JSONObject sys = jsonObject.getJSONObject("sys");
 
-
         int temp = main.getInt("temp");
         int pressure = main.getInt("pressure");
         int humidity = main.getInt("humidity");
@@ -47,8 +46,8 @@ public class DownloadWeatherService {
         String country = sys.getString("country");
 
         return "Country: " + country + '\n' +
-               "temperature: " + (temp - 273)+ "°C" + '\n' +
-               "(min/max) "+ (temp_min-273) + "°C " + '/' +
+               "temperature: " + (temp - 273) + "°C" + '\n' +
+               "min/max: " + (temp_min-273) + "°C " + '/' +
                (temp_max-273) + "°C" + '\n' +
                "pressure: " + pressure + " hPa" + '\n' +
                "humidity: " + humidity + " %" + '\n';

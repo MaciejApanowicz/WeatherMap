@@ -13,5 +13,4 @@ public class MainView {
     public void printWeather (String weatherText){
         System.out.println(weatherText);
     }
-
 }
