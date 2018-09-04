@@ -1,7 +1,6 @@
 package pl.maciejapanowicz.weathermap.models;
 
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -22,7 +21,6 @@ public class DownloadWeatherService {
         try {
             HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
             InputStream inputStream = httpURLConnection.getInputStream();
-
             int response;
             while ((response = inputStream.read()) != -1){
                 stringBuilder.append((char) response);
@@ -36,18 +34,23 @@ public class DownloadWeatherService {
     public String getWeather(String cityName){
         String url = Config.URL_TO_APi + cityName + "&appid=" +Config.API_KEY;
         String json = readWebsite(url);
-
-        String result;
         JSONObject jsonObject = new JSONObject(json);
         JSONObject main = jsonObject.getJSONObject("main");
+        JSONObject sys = jsonObject.getJSONObject("sys");
 
-        double temp = main.getDouble("temp");
+
+        int temp = main.getInt("temp");
         int pressure = main.getInt("pressure");
         int humidity = main.getInt("humidity");
-        double temp_min = main.getDouble("temp_min");
-        double temp_max = main.getDouble("temp_max");
+        int temp_min = main.getInt("temp_min");
+        int temp_max = main.getInt("temp_max");
+        String country = sys.getString("country");
 
-
-        return "Temp: " + (temp - 273) + " pressure: " + pressure + " humidity: " + humidity;
+        return "Country: " + country + '\n' +
+               "temperature: " + (temp - 273)+ "°C" + '\n' +
+               "(min/max) "+ (temp_min-273) + "°C " + '/' +
+               (temp_max-273) + "°C" + '\n' +
+               "pressure: " + pressure + " hPa" + '\n' +
+               "humidity: " + humidity + " %" + '\n';
     }
 }

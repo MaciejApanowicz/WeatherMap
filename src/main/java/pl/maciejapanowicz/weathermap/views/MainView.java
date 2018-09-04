@@ -7,7 +7,7 @@ public class MainView {
     }
 
     public void askForCityToCheckWeather(){
-        System.out.println("type the city you want to check for a weather");
+        System.out.println("Type the name of the city: ");
     }
 
     public void printWeather (String weatherText){

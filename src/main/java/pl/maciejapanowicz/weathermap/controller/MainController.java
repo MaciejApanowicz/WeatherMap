@@ -24,7 +24,8 @@ public class MainController {
         do {
             mainView.askForCityToCheckWeather();
             userAnswer = input.nextLine();
-
+                if (userAnswer.equals("exit"))
+                break;
             mainView.printWeather(downloadWeatherService.getWeather(userAnswer));
         }while (!userAnswer.equals("exit"));
     }
