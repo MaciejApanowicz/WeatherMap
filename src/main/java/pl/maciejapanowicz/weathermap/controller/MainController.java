@@ -25,8 +25,9 @@ public class MainController {
         do {
             mainView.askForCityToCheckWeather();
             userAnswer = input.nextLine();
-            if (!Pattern.matches("[A-ZŻŹĆĄĘŚÓ][a-zżźćąśęó]{2,20}",userAnswer)) {
+            if ((!Pattern.matches("[A-ZŻŹĆĄĘŃŚÓ][a-zżźćąńśęó]{2,20}",userAnswer))&&(!userAnswer.equals("exit"))) {
                 mainView.typeCorrectCity();
+                continue;
             }
                 if (userAnswer.equals("exit"))
                 break;
