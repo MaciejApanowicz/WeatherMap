@@ -3,6 +3,7 @@ package pl.maciejapanowicz.weathermap.controller;
 import pl.maciejapanowicz.weathermap.models.DownloadWeatherService;
 import pl.maciejapanowicz.weathermap.views.MainView;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class MainController {
     private MainView mainView;
@@ -24,6 +25,9 @@ public class MainController {
         do {
             mainView.askForCityToCheckWeather();
             userAnswer = input.nextLine();
+            if (!Pattern.matches("[A-ZŻŹĆĄĘŚÓ][a-zżźćąśęó]{2,20}",userAnswer)) {
+                mainView.typeCorrectCity();
+            }
                 if (userAnswer.equals("exit"))
                 break;
             mainView.printWeather(downloadWeatherService.getWeather(userAnswer));
