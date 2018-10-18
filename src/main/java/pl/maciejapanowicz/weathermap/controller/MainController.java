@@ -10,6 +10,8 @@ public class MainController {
     private Scanner input;
     private DownloadWeatherService downloadWeatherService = DownloadWeatherService.getINSTANCE();
 
+    private final String IS_CITY_VALID_REGEX ="[A-ZŻŹĆĄĘŃŚÓ][a-zżźćąńśęó]{2,20}";
+
     public MainController(){
         mainView = new MainView();
         input = new Scanner(System.in);
@@ -25,7 +27,7 @@ public class MainController {
         do {
             mainView.askForCityToCheckWeather();
             userAnswer = input.nextLine();
-            if ((!Pattern.matches("[A-ZŻŹĆĄĘŃŚÓ][a-zżźćąńśęó]{2,20}",userAnswer))&&(!userAnswer.equals("exit"))) {
+            if ((!Pattern.matches(IS_CITY_VALID_REGEX,userAnswer))&&(!userAnswer.equals("exit"))) {
                 mainView.typeCorrectCity();
                 continue;
             }
@@ -34,5 +36,6 @@ public class MainController {
             mainView.printWeather(downloadWeatherService.getWeather(userAnswer));
         }while (!userAnswer.equals("exit"));
     }
+    public void ok(){}
 }
 
