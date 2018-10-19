@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DownloadWeatherService{
     private static DownloadWeatherService INSTANCE = new DownloadWeatherService();
@@ -35,15 +33,22 @@ public class DownloadWeatherService{
     }
 
     public String getWeather(String cityName){
-        String url = Config.URL_TO_APi + cityName + "&appid=" +Config.API_KEY;
-        String json = readWebsite(url);
-        JSONObject root = new JSONObject(json);
+        String url = Config.URL_TO_APi + cityName+"&appid=" +Config.API_KEY;
+        String cleanJSON = readWebsite(url);
+        JSONObject root = new JSONObject(cleanJSON);
+
         JSONObject main = root.getJSONObject("main");
         JSONObject sys = root.getJSONObject("sys");
 
-        JSONArray jsonArray = new JSONArray();
+        JSONArray weather = root.getJSONArray("weather");
 
+        String description = "";
+        for (int i = 0; i <weather.length();i++){
+            JSONObject objectInArray = weather.getJSONObject(i);
+            description = objectInArray.getString("description");
+        }
 
+        int visibility = root.getInt("visibility");
         int temp = main.getInt("temp");
         int pressure = main.getInt("pressure");
         int humidity = main.getInt("humidity");
@@ -56,6 +61,8 @@ public class DownloadWeatherService{
                "min/max: " + (temp_min-273) + "°C " + '/' +
                (temp_max-273) + "°C" + '\n' +
                "pressure: " + pressure + " hPa" + '\n' +
-               "humidity: " + humidity + " %" + '\n' ;
+               "humidity: " + humidity + " %" + '\n' +
+               "description: " + description + '\n' +
+               "visibility: " + visibility + '\n';
     }
 }

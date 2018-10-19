@@ -36,6 +36,5 @@ public class MainController {
             mainView.printWeather(downloadWeatherService.getWeather(userAnswer));
         }while (!userAnswer.equals("exit"));
     }
-    public void ok(){}
 }
 

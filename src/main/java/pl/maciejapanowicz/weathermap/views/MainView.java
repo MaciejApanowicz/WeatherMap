@@ -7,7 +7,8 @@ public class MainView {
     }
 
     public void askForCityToCheckWeather(){
-        System.out.println("Type the name of the city: or \"exit\" if you want to finish ");
+        System.out.println("Type the name of the city you want the data to be displayed: \n" +
+                "(or \"exit\" if you want to close the app)");
     }
 
     public void printWeather (String weatherText){
