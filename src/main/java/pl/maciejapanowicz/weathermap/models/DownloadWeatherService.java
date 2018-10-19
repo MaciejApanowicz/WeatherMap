@@ -6,6 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DownloadWeatherService{
     private static DownloadWeatherService INSTANCE = new DownloadWeatherService();
@@ -32,8 +37,8 @@ public class DownloadWeatherService{
         return stringBuilder.toString();
     }
 
-    public String getWeather(String cityName){
-        String url = Config.URL_TO_APi + cityName+"&appid=" +Config.API_KEY;
+    public String getCurrentWeather(String cityName){
+        String url = Config.URL_TO_CURRENT_WEATHER + cityName+"&appid=" +Config.API_KEY;
         String cleanJSON = readWebsite(url);
         JSONObject root = new JSONObject(cleanJSON);
 
@@ -64,5 +69,45 @@ public class DownloadWeatherService{
                "humidity: " + humidity + " %" + '\n' +
                "description: " + description + '\n' +
                "visibility: " + visibility + '\n';
+    }
+
+    public List<SingleDayWeather> getWeatherForecast(String cityName){
+        String url = Config.URL_WEATHER_FORECAST + cityName +"&appid="+Config.API_KEY;
+        String cleanJSON = readWebsite(url);
+        JSONObject root = new JSONObject(cleanJSON);
+
+        JSONArray list = root.getJSONArray("list");
+        System.out.println(list.length());
+
+        List<SingleDayWeather> seprateDaysWeatherParamiters = new ArrayList<>();
+
+        int localDay = 0;
+        int tempSum = 0;
+        int counter = 1;
+
+        for (int i = 0; i < list.length(); i++){
+            JSONObject objectInsideArray = list.getJSONObject(i);
+            JSONObject main = objectInsideArray.getJSONObject("main");
+
+            LocalDateTime localDateTime =
+                    LocalDateTime.ofEpochSecond(objectInsideArray.getInt("dt"),0,ZoneOffset.UTC);
+
+            int temp = main.getInt("temp");
+
+            if (localDay != localDateTime.getDayOfYear()){
+                seprateDaysWeatherParamiters.add(new SingleDayWeather((tempSum/counter),localDateTime.minusDays(1)));
+                localDay = localDateTime.getDayOfYear();
+
+                tempSum = temp;
+                counter = 1;
+                System.out.println("counter = "+ counter);
+            }
+            else {
+                counter++;
+                tempSum += temp;
+            }
+            System.out.println("temperature: " +(temp -273)+"°C");
+        }
+        return seprateDaysWeatherParamiters;
     }
 }

@@ -1,6 +1,7 @@
 package pl.maciejapanowicz.weathermap.controller;
 
 import pl.maciejapanowicz.weathermap.models.DownloadWeatherService;
+import pl.maciejapanowicz.weathermap.models.SingleDayWeather;
 import pl.maciejapanowicz.weathermap.views.MainView;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -19,22 +20,40 @@ public class MainController {
 
     public void start(){
         mainView.showWelcomeText();
-        createMainLoop();
+        createMenu();
     }
 
-    private void createMainLoop(){
-        String userAnswer;
+    private void createMenu() {
+
+        String choose;
         do {
-            mainView.askForCityToCheckWeather();
-            userAnswer = input.nextLine();
-            if ((!Pattern.matches(IS_CITY_VALID_REGEX,userAnswer))&&(!userAnswer.equals("exit"))) {
-                mainView.typeCorrectCity();
-                continue;
+            MainView.showMenu();
+            choose = input.nextLine();
+
+            if (choose.equals("1")) {
+                mainView.printWeather(downloadWeatherService.getCurrentWeather(setCityToCheck()));
+
+            } else
+                if (choose.equals("2")) {
+                //todo create logic for getWeatherForecast method;
+                    String text = "";
+                    for (SingleDayWeather singleDayWeather : downloadWeatherService.getWeatherForecast(setCityToCheck())){
+                        text += singleDayWeather.getTemp() + " / " + singleDayWeather.getLocalDateTime() + "\n";
+                    }
+               mainView.printWeather(text);
             }
-                if (userAnswer.equals("exit"))
-                break;
-            mainView.printWeather(downloadWeatherService.getWeather(userAnswer));
-        }while (!userAnswer.equals("exit"));
+        } while (!((choose.equals("3"))||(choose.toUpperCase().equals("EXIT"))));
+    }
+
+    private String setCityToCheck(){
+        String userAnswer;
+        mainView.askForCityToCheckWeather();
+        userAnswer = input.nextLine();
+
+        if ((userAnswer.equals("exit"))) System.exit(-1);
+        while ((!(Pattern.matches(IS_CITY_VALID_REGEX,userAnswer)))) {
+                mainView.typeCorrectCity();
+        }
+        return userAnswer;
     }
 }
-
