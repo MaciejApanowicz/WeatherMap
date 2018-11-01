@@ -16,7 +16,7 @@ public class MainView {
     }
     public void typeCorrectCity (){
         System.out.println("You have typed the city incorrectly, please type the city again.");
-        System.out.println("There should only be letters in the city's name and the first one should be a capital letter.");
+        System.out.println("There should only be letters in the city's name and the first one should be a capital letter.\n");
     }
 
     public static void showMenu () {

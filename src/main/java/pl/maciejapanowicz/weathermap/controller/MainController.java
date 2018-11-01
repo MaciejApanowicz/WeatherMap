@@ -10,7 +10,6 @@ public class MainController {
     private MainView mainView;
     private Scanner input;
     private DownloadWeatherService downloadWeatherService = DownloadWeatherService.getINSTANCE();
-
     private final String IS_CITY_VALID_REGEX ="[A-ZŻŹĆĄĘŃŚÓ][a-zżźćąńśęó]{2,20}";
 
     public MainController(){
@@ -38,7 +37,11 @@ public class MainController {
                 //todo create logic for getWeatherForecast method;
                     String text = "";
                     for (SingleDayWeather singleDayWeather : downloadWeatherService.getWeatherForecast(setCityToCheck())){
-                        text += singleDayWeather.getTemp() + " / " + singleDayWeather.getLocalDateTime() + "\n";
+                        text +=  singleDayWeather.getLocalDateTime().getDayOfMonth()
+                               + " " + singleDayWeather.getLocalDateTime().getMonth()
+                               + " " + singleDayWeather.getLocalDateTime().getYear()
+                               + " (Average temperature: " + (singleDayWeather.getTemp() - 273) + "°C)" +"\n";
+
                     }
                mainView.printWeather(text);
             }
@@ -47,12 +50,15 @@ public class MainController {
 
     private String setCityToCheck(){
         String userAnswer;
-        mainView.askForCityToCheckWeather();
-        userAnswer = input.nextLine();
+        do {
+            mainView.askForCityToCheckWeather();
+            userAnswer = input.nextLine();
 
-        if ((userAnswer.equals("exit"))) System.exit(-1);
-        while ((!(Pattern.matches(IS_CITY_VALID_REGEX,userAnswer)))) {
-                mainView.typeCorrectCity();
+            if ((userAnswer.equals("exit"))) System.exit(-1);
+            if (!(Pattern.matches(IS_CITY_VALID_REGEX,userAnswer))) mainView.typeCorrectCity();
+        }
+        while ((!(Pattern.matches(IS_CITY_VALID_REGEX,userAnswer)))); {
+
         }
         return userAnswer;
     }

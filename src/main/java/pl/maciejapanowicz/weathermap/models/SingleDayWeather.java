@@ -6,7 +6,7 @@ public class SingleDayWeather {
     private int temp;
     private LocalDateTime localDateTime;
 
-    public SingleDayWeather (int temp, LocalDateTime localDateTime){
+    public SingleDayWeather (LocalDateTime localDateTime, int temp){
         this.temp = temp;
         this.localDateTime = localDateTime;
     }

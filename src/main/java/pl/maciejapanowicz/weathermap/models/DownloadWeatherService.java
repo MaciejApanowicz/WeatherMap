@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -77,7 +76,7 @@ public class DownloadWeatherService{
         JSONObject root = new JSONObject(cleanJSON);
 
         JSONArray list = root.getJSONArray("list");
-        System.out.println(list.length());
+        //System.out.println(list.length());
 
         List<SingleDayWeather> seprateDaysWeatherParamiters = new ArrayList<>();
 
@@ -95,18 +94,18 @@ public class DownloadWeatherService{
             int temp = main.getInt("temp");
 
             if (localDay != localDateTime.getDayOfYear()){
-                seprateDaysWeatherParamiters.add(new SingleDayWeather((tempSum/counter),localDateTime.minusDays(1)));
+                seprateDaysWeatherParamiters.add(new SingleDayWeather(localDateTime.minusDays(1),(tempSum/counter)));
                 localDay = localDateTime.getDayOfYear();
 
                 tempSum = temp;
                 counter = 1;
-                System.out.println("counter = "+ counter);
+                //System.out.println("counter = "+ counter);
             }
             else {
                 counter++;
                 tempSum += temp;
             }
-            System.out.println("temperature: " +(temp -273)+"°C");
+            //System.out.println("temperature: " +(temp -273)+"°C");
         }
         return seprateDaysWeatherParamiters;
     }
