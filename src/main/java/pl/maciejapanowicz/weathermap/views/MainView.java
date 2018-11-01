@@ -3,7 +3,7 @@ package pl.maciejapanowicz.weathermap.views;
 public class MainView {
 
     public void showWelcomeText (){
-        System.out.println("Welcome User!");
+        System.out.println("\nWelcome User!");
     }
 
     public void askForCityToCheckWeather(){
@@ -21,7 +21,7 @@ public class MainView {
 
     public static void showMenu () {
         System.out.println(" 1 - Current weather");
-        System.out.println(" 2 - weather forecast for the next 5 days");
+        System.out.println(" 2 - Weather forecast");
         System.out.println(" 3 - EXIT");
     }
 }

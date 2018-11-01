@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,8 @@ public class DownloadWeatherService{
                 stringBuilder.append((char) response);
             }
         }catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Sorry, you have typed incorrect city name. Re-run WeatherMap.");
+            System.exit(0);
         }
         return stringBuilder.toString();
     }
@@ -76,9 +76,7 @@ public class DownloadWeatherService{
         JSONObject root = new JSONObject(cleanJSON);
 
         JSONArray list = root.getJSONArray("list");
-        //System.out.println(list.length());
-
-        List<SingleDayWeather> seprateDaysWeatherParamiters = new ArrayList<>();
+        List<SingleDayWeather> separateDaysWeatherParameters = new ArrayList<>();
 
         int localDay = 0;
         int tempSum = 0;
@@ -88,25 +86,23 @@ public class DownloadWeatherService{
             JSONObject objectInsideArray = list.getJSONObject(i);
             JSONObject main = objectInsideArray.getJSONObject("main");
 
-            LocalDateTime localDateTime =
-                    LocalDateTime.ofEpochSecond(objectInsideArray.getInt("dt"),0,ZoneOffset.UTC);
-
+            String stringDate = objectInsideArray.getString("dt_txt");
+            String dateFormat = stringDate.substring(0,10)+"T"+stringDate.substring(11);
+            LocalDateTime pointOfTimeInTheFutureWhereForecastingPointsTo = LocalDateTime.parse(dateFormat);
             int temp = main.getInt("temp");
 
-            if (localDay != localDateTime.getDayOfYear()){
-                seprateDaysWeatherParamiters.add(new SingleDayWeather(localDateTime.minusDays(1),(tempSum/counter)));
-                localDay = localDateTime.getDayOfYear();
-
+            if (localDay != pointOfTimeInTheFutureWhereForecastingPointsTo.getDayOfYear()){
+                separateDaysWeatherParameters.add(new SingleDayWeather(pointOfTimeInTheFutureWhereForecastingPointsTo.minusDays(1),(tempSum/counter)));
+                localDay = pointOfTimeInTheFutureWhereForecastingPointsTo.getDayOfYear();
                 tempSum = temp;
                 counter = 1;
-                //System.out.println("counter = "+ counter);
             }
             else {
                 counter++;
                 tempSum += temp;
             }
-            //System.out.println("temperature: " +(temp -273)+"°C");
         }
-        return seprateDaysWeatherParamiters;
+        separateDaysWeatherParameters.remove(0);
+        return separateDaysWeatherParameters;
     }
 }

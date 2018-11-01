@@ -34,16 +34,14 @@ public class MainController {
 
             } else
                 if (choose.equals("2")) {
-                //todo create logic for getWeatherForecast method;
-                    String text = "";
+                    StringBuilder text = new StringBuilder();
                     for (SingleDayWeather singleDayWeather : downloadWeatherService.getWeatherForecast(setCityToCheck())){
-                        text +=  singleDayWeather.getLocalDateTime().getDayOfMonth()
+                        text.append(singleDayWeather.getLocalDateTime().getDayOfMonth()
                                + " " + singleDayWeather.getLocalDateTime().getMonth()
                                + " " + singleDayWeather.getLocalDateTime().getYear()
-                               + " (Average temperature: " + (singleDayWeather.getTemp() - 273) + "°C)" +"\n";
-
+                               + " (Average temperature: " + (singleDayWeather.getTemp() - 273) + "°C)" +"\n");
                     }
-               mainView.printWeather(text);
+               mainView.printWeather(text.toString());
             }
         } while (!((choose.equals("3"))||(choose.toUpperCase().equals("EXIT"))));
     }
@@ -53,12 +51,10 @@ public class MainController {
         do {
             mainView.askForCityToCheckWeather();
             userAnswer = input.nextLine();
-
             if ((userAnswer.equals("exit"))) System.exit(-1);
             if (!(Pattern.matches(IS_CITY_VALID_REGEX,userAnswer))) mainView.typeCorrectCity();
         }
         while ((!(Pattern.matches(IS_CITY_VALID_REGEX,userAnswer)))); {
-
         }
         return userAnswer;
     }
